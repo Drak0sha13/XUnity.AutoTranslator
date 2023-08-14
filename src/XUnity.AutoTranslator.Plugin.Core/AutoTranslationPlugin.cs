@@ -34,6 +34,7 @@ using XUnity.Common.Extensions;
 using XUnity.AutoTranslator.Plugin.Core.UIResize;
 using XUnity.AutoTranslator.Plugin.Core.UI;
 using XUnity.AutoTranslator.Plugin.Core.Fonts;
+using XUnity.AutoTranslator.Plugin.Core.Services;
 
 #if MANAGED
 using MonoMod.RuntimeDetour;
@@ -159,6 +160,8 @@ namespace XUnity.AutoTranslator.Plugin.Core
 
          // load all translations from files
          LoadTranslations( false );
+
+         DefaultIgnoreNameService.Instance.Init();
 
          XuaLogger.AutoTranslator.Info( $"Loaded XUnity.AutoTranslator into Unity [{Application.unityVersion}] game." );
       }

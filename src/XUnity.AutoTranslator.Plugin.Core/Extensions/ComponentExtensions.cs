@@ -8,6 +8,7 @@ using System.Text;
 using UnityEngine;
 using XUnity.AutoTranslator.Plugin.Core.Configuration;
 using XUnity.AutoTranslator.Plugin.Core.Constants;
+using XUnity.AutoTranslator.Plugin.Core.Services;
 using XUnity.AutoTranslator.Plugin.Core.Text;
 using XUnity.AutoTranslator.Plugin.Core.Textures;
 using XUnity.AutoTranslator.Plugin.Core.Utilities;
@@ -575,6 +576,18 @@ namespace XUnity.AutoTranslator.Plugin.Core.Extensions
          return go;
       }
 
+      public static IEnumerable<string> GetReversePathSegments( this object obj )
+      {
+         var go = GetAssociatedGameObject( obj );
+
+         var transform = go?.transform;
+         while( transform != null )
+         {
+            yield return transform.name;
+            transform = transform.parent;
+         }
+      }
+
       public static string[] GetPathSegments( this object obj )
       {
          var go = GetAssociatedGameObject( obj );
@@ -614,7 +627,8 @@ namespace XUnity.AutoTranslator.Plugin.Core.Extensions
       public static bool HasIgnoredName( this object ui )
       {
          var go = GetAssociatedGameObject( ui );
-         return go.name.Contains( XuaIgnore );
+         bool b = go.name.Contains( XuaIgnore );
+         return b || DefaultIgnoreNameService.Instance.HasIgnoredName( go.GetReversePathSegments() );
       }
 
       public static Texture2D GetTexture( this object ui )
